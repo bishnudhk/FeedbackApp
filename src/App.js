@@ -1,33 +1,42 @@
 
-import { useState } from 'react';
-import './App.css';
-import FeedbackItem from './component/FeedbackItem';
-import Header from './component/Header';
-import FeedbackData from './data/FeedbackData';
-import FeedbackList from './component/FeedbackList';
-import FeedbackStats from './component/FeedbackStats';
-import FeedbackForm from './component/FeedbackForm';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import "./App.css";
+import Header from "./component/Header";
+import FeedbackList from "./component/FeedbackList";
+import FeedbackStats from "./component/FeedbackStats";
+import FeedbackForm from "./component/FeedbackForm";
+import AboutPage from "./pages/AboutPage";
+import AboutIconLink from "./component/AboutIconLink";
+import { FeedbackProvider } from "./context/FeedbackContext";
 
 function App() {
-  const [feedback, setFeedback] = useState(FeedbackData);
-
-  const deleteFeedback= (id) => {
-    if(window.confirm("Are you sure you want to delete?")){
-      setFeedback(feedback.filter((item) => item.id !== id))
-    }
-  }
 
   return (
-    <>
-    <Header text="Feedback UI" />
-    <div className='container'>
-      <FeedbackForm />
-      <FeedbackStats feedback={feedback} />
-      <FeedbackList feedback={feedback} 
-      handleDelete={deleteFeedback} />
-    </div>
-     
-    </>
+    <FeedbackProvider>
+      <Router>
+        <Header text="Feedback UI" />
+        <div className="container">
+          <Routes>
+            <Route
+              exact
+              path="/"
+              element={
+                <>
+                  <FeedbackForm />
+                  <FeedbackStats />
+                  <FeedbackList />
+                </>
+              }
+            ></Route>
+            <Route path="/about" element={<AboutPage />} />
+            {/* <Route path="/post/*" element={<Post />} />   */}
+            {/* use * to show  */}
+          </Routes>
+
+          <AboutIconLink />
+        </div>
+      </Router>
+    </FeedbackProvider>
   );
 }
 
